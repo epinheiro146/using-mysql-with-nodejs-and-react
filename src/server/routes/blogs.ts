@@ -22,7 +22,13 @@ router.get('/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
         const blog = await Blogs.getById(id);
-        res.json(blog[0]);
+
+        if (blog[0]) {
+            res.json({ ...blog[0], tags: blog[0].tagStr?.split(",") || [] });
+        } else {
+            res.status(404).json({ message: "Blog doesn't exist or was deleted!" });
+        }
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Tried fetching the selected blog post, but something went wrong." })

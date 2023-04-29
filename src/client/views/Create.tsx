@@ -54,7 +54,7 @@ const Create = () => {
                 swal("Nice!", `${data.message}`, "success");
                 nav(`/blogs/${data.id}`)
             })
-            .catch(error => swal("Oops!", `${error.message}`, "error")); // will handle any network or server-side error
+            .catch(error => swal("Oops!", `${error.message}`, "error"));
 
     };
 

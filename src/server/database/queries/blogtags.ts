@@ -1,7 +1,7 @@
 import { Query } from "..";
 import { BlogTags, Blog, Tag } from "../../../types";
 
-const getByBlogId = (blogid: Blog['id']) => Query<BlogTags[]>( // check later if this needs to be an array or not
+const getByBlogId = (blogid: Blog['id']) => Query<BlogTags[]>(
     `CALL spBlogTags(?)`,
     [blogid]
 );

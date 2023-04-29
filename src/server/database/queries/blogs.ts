@@ -1,5 +1,5 @@
 import { Query } from "..";
-import { BlogWAuthor } from "../../../types";
+import { BlogWAuthor, BlogWTags } from "../../../types";
 
 const getAll = () => Query<BlogWAuthor[]>(
     `SELECT
@@ -10,13 +10,17 @@ const getAll = () => Query<BlogWAuthor[]>(
     ORDER BY b.id`
 );
 
-const getById = (id: number) => Query<BlogWAuthor[]>( // check later if this needs to be an array or not
+const getById = (id: number) => Query<BlogWTags[]>(
     `SELECT
-        b.*,
-        a.name as authorname
+	    b.*,
+        a.name as authorname,
+        group_concat(t.name) as tagStr
     FROM blogs b
-    JOIN authors a ON b.authorid = a.id 
-    WHERE b.id = ?`, [id]
+    JOIN authors a on b.authorid = a.id
+    LEFT JOIN blogtags bt on bt.blogid = b.id
+    LEFT JOIN tags t on t.id = bt.tagid
+    WHERE b.id = ?
+    GROUP BY b.id`, [id]
 );
 
 const create = (title: BlogWAuthor['title'], content: BlogWAuthor['content'], authorid: BlogWAuthor['authorid']) => Query(

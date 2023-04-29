@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Blog } from "../../types";
+import { Blog, Tag } from "../../types";
 import { fetcher } from "../services/fetch-helper";
+import ReactSelect from "react-select";
 import swal from "sweetalert";
 
 const Edit = () => {

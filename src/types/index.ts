@@ -22,6 +22,11 @@ export interface BlogWAuthor extends Blog {
     authorname: Author['name'];
 };
 
+export interface BlogWTags extends BlogWAuthor {
+    tagStr?: string;
+    tags: string[];
+};
+
 export interface BlogTags {
     blogid: Blog['id'];
     tagid: Tag['id'];

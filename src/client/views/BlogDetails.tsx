@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { BlogWAuthor } from "../../types";
+import { BlogWTags } from "../../types";
 import { useParams, Link } from "react-router-dom";
 import { fetcher } from "../services/fetch-helper";
 import swal from "sweetalert";
 
 const BlogDetails = () => {
-    const [blog, setBlog] = useState<BlogWAuthor>();
+    const [blog, setBlog] = useState<BlogWTags>();
     const { id } = useParams();
 
     useEffect(() => {
@@ -14,6 +14,8 @@ const BlogDetails = () => {
             .then(data => setBlog(data))
             .catch(error => swal("Oops!", error.message, "error"));
     }, [id]);
+
+    console.log(blog?.tags);
 
     return (
         <div className="mt-5 row justify-content-center">
@@ -26,6 +28,13 @@ const BlogDetails = () => {
                         <p>{blog?.content}</p>
                     </div>
                     <div className="card-footer">
+                        <p>
+                            {blog?.tags.map(tag => (
+                                <span className="mx-2" key={`${blog.id}-${tag}`}>
+                                    #{tag}
+                                </span>
+                            ))}
+                        </p>
                         <p>{blog?._created ? `Posted ${new Date(blog._created).toLocaleString()}` : ""} by {blog?.authorname}</p>
                         <Link className="btn btn-outline-light" to={`/blogs/${id}/edit`}>
                             Edit/Delete
