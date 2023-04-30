@@ -2,7 +2,6 @@ import * as express from 'express';
 import Blogs from '../database/queries/blogs';
 import Blogtags from '../database/queries/blogtags';
 import { BlogWAuthor, BlogTags } from '../../types';
-import { MultiValue } from "react-select";
 
 const router = express.Router();
 
@@ -70,7 +69,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const { title, content } = req.body as { title: BlogWAuthor['title'], content: BlogWAuthor['content'] };
+        const { title, content, selectedTags } = req.body as { title: BlogWAuthor['title'], content: BlogWAuthor['content'], selectedTags: { value: number, label: string }[] };
 
         if (!title || typeof title !== "string" || title.length > 60) {
             return res.status(400).json({ message: "Sorry, the title must be between 1 and 60 characters." });
@@ -82,6 +81,12 @@ router.put('/:id', async (req, res) => {
 
         await Blogtags.deleteByBlogId(id);
         await Blogs.update(id, title, content);
+
+        for await (const selectedTag of selectedTags) {
+            const tagid = selectedTag.value;
+
+            await Blogtags.create(id, tagid);
+        };
 
         res.status(201).json({ message: "Post has been updated." });
     } catch (error) {
